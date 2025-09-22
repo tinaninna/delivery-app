@@ -8,6 +8,7 @@ import 'package:delivery_app/components/my_tab_bar.dart';
 import 'package:delivery_app/components/my_textfield.dart';
 import 'package:delivery_app/model/food.dart';
 import 'package:delivery_app/model/restorants.dart';
+import 'package:delivery_app/pages/food_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,12 @@ List<Widget> getFoodInThisCategory(List<Food> fullMenu) {
         //return food list UI
         return FoodTitle(
           food: food, 
-          onTap: (){},
+          onTap: () => Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => FoodPage(food: food)
+            )
+          ),
         );
       },
     );
