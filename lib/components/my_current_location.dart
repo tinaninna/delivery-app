@@ -1,16 +1,20 @@
+import 'package:delivery_app/model/restorants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyCurrentLocation extends StatelessWidget{
   const MyCurrentLocation({ super.key});
 
   void openLocationSearchBox(BuildContext context){
+    final TextEditingController textController = TextEditingController();
+    
     showDialog(
       context: context, 
       builder: (context) => AlertDialog(
         title: const Text("Your location"),
         content: const TextField(
           decoration: InputDecoration(
-            hintText: "Search sddress.. "
+            hintText: "Enter address.. "
           ),
         ),
         actions: [
@@ -22,7 +26,13 @@ class MyCurrentLocation extends StatelessWidget{
 
           //save button
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              //update delivery address
+              String newAddress = textController.text;
+              context.read<Restorants>().updateDeliveryAddress(newAddress);
+              Navigator.pop(context);
+              textController.clear();
+            } ,
             child: const Text("Save"),
           )
         ],
@@ -38,7 +48,7 @@ class MyCurrentLocation extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Deliver nowv",
+            "Deliver now",
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           GestureDetector(
@@ -46,12 +56,14 @@ class MyCurrentLocation extends StatelessWidget{
             child: Row(
               children: [
                 //address
-                Text(
-                  "6901 Hollywood Biv",
+                Consumer<Restorants>(
+                  builder: (context, restorant, child) => Text(
+                    restorant.deliveryAddress , 
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.bold
                   ),
+                ),
                 ),
                   
                 // drop down menu
